@@ -62,12 +62,22 @@ class ProfessionalServices extends \Piwik\Plugin
 
     public function getSearchKeywordsPerformancePromo(&$out)
     {
-        if(\Piwik\Plugin\Manager::getInstance()->isPluginActivated('SearchEngineKeywordsPerformance')
-            || $this->isRequestForDashboardWidget()) {
+        if ($this->isRequestForDashboardWidget()) {
             return;
         }
 
         $view = new View('@ProfessionalServices/promoSearchKeywords');
+        $view->isActive = false;
+        $view->reportEnabled = false;
+
+        if (\Piwik\Plugin\Manager::getInstance()->isPluginActivated('SearchEngineKeywordsPerformance')) {
+            $view->isActive = true;
+            $report = new \Piwik\Plugins\SearchEngineKeywordsPerformance\Reports\GetCrawlingErrorsGoogle();
+            if ($report->isBingEnabled() || $report->isEnabled()) {
+                $view->reportEnabled = true;
+            }
+        }
+
         $out .= $view->render();
     }
 
