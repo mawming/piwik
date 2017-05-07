@@ -134,9 +134,9 @@ describe("Dashboard", function () {
 
     it("should open row evolution", function (done) {
         expect.screenshot("rowevolution").to.be.capture(function (page) {
-            page.mouseMove('#widgetActionsgetPageUrls table.dataTable tbody tr:first-child');
-            page.mouseMove('a.actionRowEvolution:visible'); // necessary to get popover to display
-            page.click('a.actionRowEvolution:visible');
+            page.evaluate(function(){
+                $('table.dataTable tbody a.actionRowEvolution')[0].click();
+            });
         }, done);
     });
 
